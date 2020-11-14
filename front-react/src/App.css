@@ -1,38 +1,62 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  background-color: var(--color-background);
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: var(--color-background-header);
+  text-align: center;
+  font-size: calc(8px + 2vmin);
+  color: var(--color-primary);
+}
+
+#content {
+  margin: var(--margin-primary);
+}
+
+.operationName {
+  color: var(--color--secondary-text);
+}
+
+.operationBlock {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: flex-start;
+  margin-top: var(--margin-primary);
 }
 
-.App-link {
-  color: #61dafb;
+.operationBlockPart {
+  display: inline;
+  /*margin-top: var(--margin-secondary);*/
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.operationElement {
+  border-radius: 5%;
+  margin: var(--margin-secondary);
+  min-height: 25px;
+}
+
+.inputElement {
+  min-width: 250px;
+  border-color: var(--color-primary);
+}
+
+.buttonElement {
+  color: var(--color-primary);
+  background-color: var(--color-background-header);
+  border-color: var(--color-background-header);
+  min-height: 30px;
+}
+
+.hr {
+  color: var(--color-primary);
+}
+
+:root {
+  --color-background: #303031;
+  --color-background-header: #0f0f0f;
+  --color-primary: #61dafb;
+  --color--secondary-text: #B0B3B8;
+  --margin-primary: 10px;
+  --margin-secondary: 5px;
 }
