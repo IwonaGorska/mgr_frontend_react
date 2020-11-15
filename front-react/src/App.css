@@ -8,10 +8,20 @@
   text-align: center;
   font-size: calc(8px + 2vmin);
   color: var(--color-primary);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 }
 
 #content {
   margin: var(--margin-primary);
+  margin-top: 60px;
+}
+
+#operationBlockBig {
+  width: fit-content;
+  /*margin-bottom: 50px;*/
 }
 
 .operationName {
@@ -23,6 +33,11 @@
   flex-direction: column;
   align-items: flex-start;
   margin-top: var(--margin-primary);
+  border: solid;
+  border-width: 0px;
+  border-bottom-width: 2px;
+  border-color: var(--color--secondary-text);
+  padding-bottom: 20px;
 }
 
 .operationBlockPart {
@@ -33,24 +48,23 @@
 .operationElement {
   border-radius: 5%;
   margin: var(--margin-secondary);
-  min-height: 25px;
+  min-height: 40px;
 }
 
 .inputElement {
   min-width: 250px;
-  border-color: var(--color-primary);
+  /*border-color: var(--color-primary) !important;*/
 }
 
 .buttonElement {
   color: var(--color-primary);
   background-color: var(--color-background-header);
   border-color: var(--color-background-header);
-  min-height: 30px;
+  min-height: 40px;
+  text-align: center;
+  font-size: 14px;
 }
 
-.hr {
-  color: var(--color-primary);
-}
 
 :root {
   --color-background: #303031;
@@ -59,4 +73,19 @@
   --color--secondary-text: #B0B3B8;
   --margin-primary: 10px;
   --margin-secondary: 5px;
+}
+
+.css-2b097c-container{
+  width: 250px;
+  margin-left: 5px;
+  margin-bottom: 10px;
+  outline: none !important;
+}
+
+.css-yk16xz-control{
+  /*min-height: 25px  !important;*/
+  /*border-width: 2px !important;
+  border-color: var(--color-primary) !important;*/
+  border-radius: 5% !important;
+  /*outline: none !important;*/
 }
