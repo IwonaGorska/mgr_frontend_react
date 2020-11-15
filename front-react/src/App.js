@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import logo from './logo.svg';
 import Select from 'react-select'
 
 class App extends React.Component {
@@ -129,6 +130,29 @@ class Operation extends React.Component {
 //Maybe now the form is not submitted by defaulr after clicking on this but at least it doesnt look weird 
 //and I will see if there are real consequences for me later
 
+class RightContent extends React.Component {
+
+  render() {
+
+    var recordsNum = 0;
+    
+    return (
+      <div id = "contentRight">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p id = "description">
+        Aplikacja jest częścią pracy magisterskiej na kierunku "Informatyka Stosowana" na temat:<br/>
+        "Badanie wydajności aplikacji webowych przy zastosowaniu Angular i React JS".<br/>
+        Jej celem jest umożliwienie zbadania zużycia zasobów strony internetowej stworzonej<br/>
+        z użyciem biblioteki React JS.<br/>
+        </p>
+        <p id = "recordsInfo">
+        Obecna liczba rekordów w bazie to: {recordsNum}
+        </p>
+      </div>
+    );
+  }
+}
+
 class Content extends React.Component {
 
   constructor() {
@@ -190,9 +214,12 @@ class Content extends React.Component {
 
   render() {
      return (
-      <div id = "content">
-          {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} />)}
-          {/*<Operation label = "Tworzenie pojedynczego rekordu"/>*/}
+       <div id = "content">
+          <div id = "contentLeft">
+              {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} />)}
+              {/*<Operation label = "Tworzenie pojedynczego rekordu"/>*/}
+          </div>
+          <RightContent/>
       </div>
      );
   }
@@ -214,13 +241,15 @@ przy operacjach niektorych i zmienic to odpowiednio
 - niech header bedzie przyczepiony do gory zawsze
 - select dropdown - jeszcze wiecej czasu potrzebne zeby znalexc cos co nie jest strasznie brzydkie
 - pobranie wartości z pól i przekazanie ich do funkcji
-
-todo:
-- validacja formy
-- przeniesienie klas do innych plików
+- pokaz gdzies ile obecnie jest rekordow w bazie - moze po prawej stronie tez
 - pomysl nad zaplanowaniem prawej strony (na mobile przejdzie na dol)
 moze animacja z logo frameworka i opis apki i pwoodu jej stworzenia i celu 
 czy to moze w nawigacji i na innej stronie?
+-------
+
+todo:
+- validacja formy
+- przeniesienie klas do innych plików 
+https://medium.com/@Charles_Stover/optimal-file-structure-for-react-applications-f3e35ad0a145
 - dodac info ikonke z wytlumaczeniem co zrobic z operacja w kolorze reacta tez - pop up lub tooltip do tego
-- pokaz gdzies ile obecnie jest rekordow w bazie - moze po prawej stronie tez
 */

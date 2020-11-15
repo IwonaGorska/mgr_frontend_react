@@ -16,7 +16,35 @@
 
 #content {
   margin: var(--margin-primary);
-  margin-top: 60px;
+  margin-top: 50px;
+}
+
+#contentLeft {
+  float: left;
+  min-width: 47%;
+  margin-bottom: 20px;
+}
+
+#contentRight {
+  display: flex;
+  flex-direction: column;
+  float: left;
+  min-width: 47%;
+  text-align: center;
+}
+
+#description{
+  color: var(--color--secondary-text);
+  float: center;
+  text-align: center;
+}
+
+#recordsInfo{
+  color: var(--color-primary);
+  font-weight: 800;
+  float: center;
+  text-align: center;
+  margin: 50px;
 }
 
 #operationBlockBig {
@@ -88,4 +116,24 @@
   border-color: var(--color-primary) !important;*/
   border-radius: 5% !important;
   /*outline: none !important;*/
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
