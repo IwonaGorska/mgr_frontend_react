@@ -2,10 +2,11 @@ import React from 'react';
 import '../App.css';
 import Operation from './Operation';
 import RightContent from './RightContent';
+import axios from "axios";
 
 class Content extends React.Component {
 
-    constructor() {
+   constructor() {
       super();
       this.state = {
          data: 
@@ -19,20 +20,20 @@ class Content extends React.Component {
             {
                "label": "Tworzenie wielu rekordów",
                "isInput": true,
-               "dropdown": [100, 1000], /*ile */
+               "dropdown": [10, 100], /*ile */
                "dropdownTitle": "Ile"
             },
-            {
+            /*{
                "label": "Zastąpienie wszystkich rekordów nowymi wartościami",
                "isInput": true,
                "dropdown": [],
                "dropdownTitle": ""
-            },
+            },*/
             {
-              "label": "Zastąpienie wybranych rekordów nowymi wartościami",
+              "label": "Zastąpienie wielu rekordów nowymi wartościami",
               "isInput": true,
-              "dropdown": [2, 10, 100], /*co ile */
-              "dropdownTitle": "Co ile"
+              "dropdown": [10, 100], /*co ile */
+              "dropdownTitle": "Ile"
             },
             {
               "label": "Wyszukanie rekordu",
@@ -58,18 +59,36 @@ class Content extends React.Component {
               "dropdown": [10, 100], /*ile */
               "dropdownTitle": "Ile"
             }
-         ]
+         ],
+         items: {}
       }
    }
+
+   componentDidMount(){
+      this.getAllItems();
+    }
+
+    getAllItems(){
+      console.log("Get all items");
+      var items = {};
+      axios.get("http://localhost:8000/items").then((response)=>{
+      items = response.data;
+      this.setState({      
+         items: items    
+         });
+         //console.log("Items from state = " + JSON.stringify(this.state.items));
+         //console.log("Item number 2 = " + JSON.stringify(this.state.items[2]));
+      });
+    }
   
     render() {
        return (
          <div id = "content">
             <div id = "contentLeft">
-                {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} />)}
+                {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} items = {this.state.items} />)}
                 {/*<Operation label = "Tworzenie pojedynczego rekordu"/>*/}
             </div>
-            <RightContent/>
+            <RightContent number = {this.state.items.length}/>
         </div>
        );
     }

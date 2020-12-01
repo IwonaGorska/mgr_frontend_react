@@ -1,16 +1,21 @@
 import React from 'react';
 import './App.css';
 import Content from './components/Content';
+// import axios from "axios";
 
 class App extends React.Component {
 
-  render() {
-     return (
-        <div>
-           <Header/>
-           <Content/>
-        </div>
-     );
+// componentDidMount(){
+//   axios.get("http://localhost:8000/items").then((response)=>{console.log(response)});
+// }
+  
+render() {
+    return (
+      <div>
+          <Header/>
+          <Content/>
+      </div>
+    );
   }
 }
 
