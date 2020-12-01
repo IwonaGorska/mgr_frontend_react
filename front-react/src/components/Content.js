@@ -2,12 +2,14 @@ import React from 'react';
 import '../App.css';
 import Operation from './Operation';
 import RightContent from './RightContent';
-import axios from "axios";
+// import axios from "axios";
+import ItemsService from '../services/ItemsService'
 
 class Content extends React.Component {
 
    constructor() {
       super();
+      this.getAllItems = this.getAllItems.bind(this);
       this.state = {
          data: 
          [
@@ -66,26 +68,26 @@ class Content extends React.Component {
 
    componentDidMount(){
       this.getAllItems();
-    }
+   }
 
-    getAllItems(){
-      console.log("Get all items");
+   getAllItems(){
+      //console.log("Get all items");
       var items = {};
-      axios.get("http://localhost:8000/items").then((response)=>{
-      items = response.data;
-      this.setState({      
-         items: items    
+      ItemsService.getAll().then((response)=>{
+         items = response.data;
+         this.setState({      
+            items: items    
          });
          //console.log("Items from state = " + JSON.stringify(this.state.items));
          //console.log("Item number 2 = " + JSON.stringify(this.state.items[2]));
       });
-    }
+   }
   
     render() {
        return (
          <div id = "content">
             <div id = "contentLeft">
-                {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} items = {this.state.items} />)}
+                {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} items = {this.state.items} getAllItems = {this.getAllItems}/>)}
                 {/*<Operation label = "Tworzenie pojedynczego rekordu"/>*/}
             </div>
             <RightContent number = {this.state.items.length}/>

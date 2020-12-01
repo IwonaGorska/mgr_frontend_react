@@ -1,7 +1,8 @@
 import React from 'react';
 import '../App.css';
 import Select from 'react-select'
-import axios from "axios";
+// import axios from "axios";
+import ItemsService from '../services/ItemsService'
 
 class Operation extends React.Component {
 
@@ -17,13 +18,13 @@ submit(number, event){
   event.preventDefault();//without this page is reloading, with this form is not validating
   var phrase = this.state.phrase;
   var amount = this.state.amount;
-  console.log("Number of operation is " + number);
-  console.log("Amount is " + amount);
-  console.log("Phrase is " + phrase);
+  //console.log("Number of operation is " + number);
+  //console.log("Amount is " + amount);
+  //console.log("Phrase is " + phrase);
+  
   switch(number){
     case 0: this.createSingleItem(phrase); break;
     case 1: this.createManyItems(phrase, amount); break;
-    //case 2: this.updateAllRecords(phrase); break;
     case 2: this.updateManyItems(phrase, amount); break;
     case 3: this.searchForItem(); break;
     case 4: this.deleteSingleItem(); break;
@@ -37,9 +38,19 @@ createSingleItem(phrase){
     var postObject = {
         name: phrase
     }
-    axios.post("http://localhost:8000/items", postObject).then(response=>{
+    ItemsService.create(postObject).then(response=>{
       console.log(response)
-  });
+      this.props.getAllItems();//update the parent component (Content)
+      //it updates items object in Content and also renders once again Operation components 
+      //so everywhere we have access to current state in database
+    });
+
+    // axios.post("http://localhost:8000/items", postObject).then(response=>{
+    //   console.log(response)
+    //   this.props.getAllItems();//update the parent component (Content)
+    //   //it updates items object in Content and also renders once again Operation components 
+    //   //so everywhere we have access to current state in database
+    // });
 }
   
 createManyItems(phrase, amount){
@@ -48,21 +59,12 @@ createManyItems(phrase, amount){
     var postObject = {
       name: phrase
     }
-    axios.post("http://localhost:8000/items", postObject).then(response=>{
+    ItemsService.create(postObject).then(response=>{
+      this.props.getAllItems();//update the parent component (Content)
       //do sth with response maybe
     });
   }
 }
-
-/*updateAllRecords(phrase){//tutaj tez trzeba w for chyba zrobic..
-  console.log("Update all records");
-  var postObject = {
-    name: phrase
-  }
-  axios.put("http://localhost:8000/items", postObject).then(response=>{
-      //do sth with response maybe
-    });
-}*/
 
 updateManyItems(phrase, amount){
   //to obliczenie, że co 10 np. to rób tutaj i stąd uderzaj w endpoint jak na pojedynczy, tylko ze w petli
@@ -77,7 +79,11 @@ updateManyItems(phrase, amount){
   }
   for(let i = 0; i < amount; i++){
     var id = this.props.items[i].item_id;
-    axios.put(`http://localhost:8000/items/${id}`, postObject).then(response=>{
+    // axios.put(`http://localhost:8000/items/${id}`, postObject).then(response=>{
+    //   this.props.getAllItems();//update the parent component (Content)
+    // });
+    ItemsService.update(id, postObject).then(response=>{
+      this.props.getAllItems();//update the parent component (Content)
       //do sth with response maybe
     });
   }
@@ -87,9 +93,14 @@ searchForItem(){
   //wylosuj id
   var id = this.drawId();
   //zrob request z tym id
-  axios.get(`http://localhost:8000/items/${id}`).then((response)=>{
+  ItemsService.get(id).then((response)=>{
     console.log("Found item = " + JSON.stringify(response.data));
+    this.props.getAllItems();//update the parent component (Content)
   });
+  // axios.get(`http://localhost:8000/items/${id}`).then((response)=>{
+  //   console.log("Found item = " + JSON.stringify(response.data));
+  //   this.props.getAllItems();//update the parent component (Content)
+  // });
 }
 
 deleteSingleItem(){
@@ -97,17 +108,23 @@ deleteSingleItem(){
   //wylosuj id
   var id = this.drawId();
   //zrob request z tym id
-  axios.delete(`http://localhost:8000/items/${id}`).then((response)=>{
+  ItemsService.delete(id).then((response)=>{
     console.log(response);
+    this.props.getAllItems();//update the parent component (Content)
   });
+  // axios.delete(`http://localhost:8000/items/${id}`).then((response)=>{
+  //   console.log(response);
+  //   this.props.getAllItems();//update the parent component (Content)
+  // });
 }
 
 deleteManyItems(amount){
   console.log("Delete many items");
   for(let i = 0; i < amount; i++){
     var id = this.props.items[i].item_id;
-    axios.delete(`http://localhost:8000/items/${id}`).then(response=>{
-      console.log(response);
+    ItemsService.delete(id).then((response)=>{
+      //console.log(response);
+      this.props.getAllItems();//update the parent component (Content)
     });
   }
 }
@@ -121,10 +138,10 @@ handlePhraseChange = (event) => {
 }
 
 drawId(){
-  //wybierz randomowy indeks z zakresu rozmiaru items
+  //choose random index in range of items array size
   var max = this.props.items.length;
   var randomNr = Math.floor(Math.random() * max);
-  //odczytaj id z niego
+  //fetch item_id of this chosen item
   var id = this.props.items[randomNr].item_id;
   console.log("Draw id = " + id);
   return id;
@@ -163,6 +180,7 @@ render() {
             {input}
             <button type = "submit" className = "operationElement buttonElement" onClick = {this.submit.bind(this, this.props.number)}>Zatwierdź</button>
           </form>
+          {/*<p>{this.props.items.length}</p> ok, it updates automatically when I change state in Content*/}
         </div>
         {/*<div><hr/></div>*/}
       </div>
