@@ -3,6 +3,7 @@ import '../App.css';
 import Select from 'react-select'
 // import axios from "axios";
 import ItemsService from '../services/ItemsService'
+import Popup from './Popup';
 
 class Operation extends React.Component {
 
@@ -10,14 +11,53 @@ constructor(props) {
   super(props);
   this.state = {
     amount: 0,
-    phrase: ""
+    phrase: "",
+    showPopup: false,
+    popupText: "Błędne dane"
   };
+}
+
+validate() {
+  var text = "";
+  var max = this.props.items.length;
+  var isCorrect = true;
+  if([1, 2, 5].includes(this.props.number) && this.state.amount === 0){
+    text += "Należy wybrać liczbę z listy. ";
+    isCorrect = false;
+  }
+
+  if([2, 5].includes(this.props.number) && this.state.amount > max){
+    text += "Wybrana liczba jest większa niż aktualna liczba wszstkich rekordów. ";
+    isCorrect = false;
+  }
+
+  if([0, 1, 2].includes(this.props.number) && !this.state.phrase){
+    text += "Pole tekstowe nie może być puste. ";
+    isCorrect = false;
+  }
+
+  if(!isCorrect){
+    this.togglePopup(text);
+  }
+
+  return isCorrect;
+}
+
+togglePopup(text) {
+  this.setState({
+    showPopup: !this.state.showPopup,
+    popupText: text
+  });
 }
   
 submit(number, event){
   event.preventDefault();//without this page is reloading, with this form is not validating
+  if(!this.validate())
+    return;
   var phrase = this.state.phrase;
   var amount = this.state.amount;
+  //var number = this.props.number;
+
   //console.log("Number of operation is " + number);
   //console.log("Amount is " + amount);
   //console.log("Phrase is " + phrase);
@@ -180,6 +220,14 @@ render() {
             {input}
             <button type = "submit" className = "operationElement buttonElement" onClick = {this.submit.bind(this, this.props.number)}>Zatwierdź</button>
           </form>
+          {this.state.showPopup ? 
+          <Popup
+            text = {this.state.popupText}
+            buttonLabel = 'Ok'
+            closePopup={this.togglePopup.bind(this)}
+          />
+          : null
+        }
           {/*<p>{this.props.items.length}</p> ok, it updates automatically when I change state in Content*/}
         </div>
         {/*<div><hr/></div>*/}

@@ -49,9 +49,9 @@ moze animacja z logo frameworka i opis apki i pwoodu jej stworzenia i celu
 czy to moze w nawigacji i na innej stronie?
 - przeniesienie klas do innych plików 
 -------
+- validacja formy
 
 todo:
-- validacja formy
 https://medium.com/@Charles_Stover/optimal-file-structure-for-react-applications-f3e35ad0a145
 - dodac info ikonke z wytlumaczeniem co zrobic z operacja w kolorze reacta tez - pop up lub tooltip do tego
 */
