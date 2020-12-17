@@ -15,6 +15,12 @@
   z-index: 10;
 }
 
+#contentChat{
+  margin: 18px;
+  margin-top: 50px;
+  line-height: 1.5 !important;
+}
+
 #content {
   margin: var(--margin-primary);
   margin-top: 50px;
@@ -178,4 +184,31 @@
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+#webSocketH{
+  color: var(--color--secondary-text);
+  font: 400 24px/32px Roboto, "Helvetica Neue", sans-serif;
+  /* --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
+}
+
+.author{
+  color: var(--color-primary);
+}
+
+.message{
+  color: var(--color--secondary-text);
+}
+
+#createMsgBlock{
+  margin-top: 15px;
+}
+
+.textareaElement{
+  height: 40px;
+  min-height: 33px;
+  min-width: 250px;
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 10px;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Content from './components/Content';
+import Chat from './components/Chat';
 // import axios from "axios";
 
 class App extends React.Component {
@@ -10,10 +11,11 @@ class App extends React.Component {
 // }
   
 render() {
-    return (
+    return ( 
       <div>
           <Header/>
-          <Content/>
+          {/* <Content/> */}
+          <Chat/>
       </div>
     );
   }
