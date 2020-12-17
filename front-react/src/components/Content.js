@@ -68,6 +68,7 @@ class Content extends React.Component {
 
    componentDidMount(){
       this.getAllItems();
+      window.setInterval(this.getAllItems, 3000);
    }
 
    getAllItems(){

@@ -105,6 +105,12 @@
   --margin-secondary: 5px;
 }
 
+.popupInner{
+  border-radius: 1%;
+  /* width: fit-content;
+  height: fit-content; */
+}
+
 .css-2b097c-container{
   width: 250px;
   margin-left: 5px;

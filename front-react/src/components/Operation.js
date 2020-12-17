@@ -19,6 +19,9 @@ constructor(props) {
 
 validate() {
   var text = "";
+  this.props.getAllItems();//update the  items object so everywhere we have access to current state in database
+      //I need to know during the validation, just now, the current items list
+      //subscription will wait maybe 1 sec and then things can change, cause error
   var max = this.props.items.length;
   var isCorrect = true;
   if([1, 2, 5].includes(this.props.number) && this.state.amount === 0){
@@ -80,9 +83,6 @@ createSingleItem(phrase){
     }
     ItemsService.create(postObject).then(response=>{
       console.log(response)
-      this.props.getAllItems();//update the parent component (Content)
-      //it updates items object in Content and also renders once again Operation components 
-      //so everywhere we have access to current state in database
     });
 
     // axios.post("http://localhost:8000/items", postObject).then(response=>{
@@ -100,7 +100,6 @@ createManyItems(phrase, amount){
       name: phrase
     }
     ItemsService.create(postObject).then(response=>{
-      this.props.getAllItems();//update the parent component (Content)
       //do sth with response maybe
     });
   }
@@ -123,7 +122,6 @@ updateManyItems(phrase, amount){
     //   this.props.getAllItems();//update the parent component (Content)
     // });
     ItemsService.update(id, postObject).then(response=>{
-      this.props.getAllItems();//update the parent component (Content)
       //do sth with response maybe
     });
   }
@@ -135,7 +133,6 @@ searchForItem(){
   //zrob request z tym id
   ItemsService.get(id).then((response)=>{
     console.log("Found item = " + JSON.stringify(response.data));
-    this.props.getAllItems();//update the parent component (Content)
   });
   // axios.get(`http://localhost:8000/items/${id}`).then((response)=>{
   //   console.log("Found item = " + JSON.stringify(response.data));
@@ -150,7 +147,6 @@ deleteSingleItem(){
   //zrob request z tym id
   ItemsService.delete(id).then((response)=>{
     console.log(response);
-    this.props.getAllItems();//update the parent component (Content)
   });
   // axios.delete(`http://localhost:8000/items/${id}`).then((response)=>{
   //   console.log(response);
@@ -164,7 +160,6 @@ deleteManyItems(amount){
     var id = this.props.items[i].item_id;
     ItemsService.delete(id).then((response)=>{
       //console.log(response);
-      this.props.getAllItems();//update the parent component (Content)
     });
   }
 }
@@ -188,7 +183,6 @@ drawId(){
 }
   
 render() {
-
   var input;
   var dropdown;
   if(this.props.isInput){
