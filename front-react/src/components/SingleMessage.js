@@ -10,10 +10,10 @@ class SingleMessage extends React.Component {
     render() {
         return (
             <div>
-                <span class = "author">
+                <span className = "author">
                     {this.props.author}:
                 </span>
-                <span class = "message">
+                <span className = "message">
                     {this.props.content}
                 </span>
             </div>
