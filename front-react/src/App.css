@@ -219,3 +219,19 @@
   margin-bottom: 10px;
   resize: both;
 }
+
+#title{
+  float: left;
+  width: 90%;
+}
+
+#links{
+  float: right;
+  width: 10%;
+}
+
+a{
+  text-decoration: none;
+  color: var(--color-primary);
+  margin-right: 5px;
+}

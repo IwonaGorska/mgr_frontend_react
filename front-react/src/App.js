@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Content from './components/Content';
 import Chat from './components/Chat';
+import { Route, Link, BrowserRouter } from 'react-router-dom'
 // import axios from "axios";
 
 class App extends React.Component {
@@ -15,7 +16,7 @@ render() {
       <div>
           <Header/>
           {/* <Content/> */}
-          <Chat/>
+          {/* <Chat/> */}
       </div>
     );
   }
@@ -24,7 +25,25 @@ render() {
 class Header extends React.Component {
   render() {
     return (
-      <div className = "App-header">Badanie wydajności aplikacji webowych przy zastosowaniu React JS</div>
+      <div className = "App-header">
+        <div id="title">
+          Badanie wydajności aplikacji webowych przy zastosowaniu React JS
+        </div>
+        <div id="links">
+        <a href="/chat" title="Chat">
+            &#9993;
+          </a>
+          <a href="/" title="Home">
+            &#9750;
+          </a>
+          {/* <Link to="/chat" title="Chat">
+            &#9993;
+          </Link>
+          <Link to="/" title="Home">
+            &#9750;
+          </Link> */}
+        </div>
+      </div>
     );
   }
 }

@@ -6,11 +6,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from "react-router-dom";
+import { Route, Link, BrowserRouter } from 'react-router-dom'
+import Chat from './components/Chat';
+import Content from './components/Content';
 
 ReactDOM.render(
 <BrowserRouter>
   <App />
+  {/* <Route exact path="/" component={App} /> */}
+  <Route exact path="/" component={Content} />
+  <Route path="/chat" component={Chat} />
 </BrowserRouter>,
 document.getElementById('root')
   /*<React.StrictMode>
