@@ -1,9 +1,5 @@
 import React from 'react';
 import './App.css';
-import Content from './components/Content';
-import Chat from './components/Chat';
-import { Route, Link, BrowserRouter } from 'react-router-dom'
-// import axios from "axios";
 
 class App extends React.Component {
 
