@@ -87,14 +87,14 @@ class Content extends React.Component {
          let time = window.performance.timing;
          let pageloadtime = time.loadEventStart - time.navigationStart;
          console.log('pageloadtime = ', pageloadtime);
-         oper.sendTestResult(5, pageloadtime);
+         oper.sendTestResult(5, pageloadtime, 1);
 
          if (!performance.memory) {
             console.log("performance.memory() is not available.");
             return;
          }
          console.log('performance.memory.usedJSHeapSize = ', performance.memory.usedJSHeapSize); 
-         oper.sendTestResult(6, performance.memory.usedJSHeapSize);
+         oper.sendTestResult(6, performance.memory.usedJSHeapSize, 1);
        }
    }
 

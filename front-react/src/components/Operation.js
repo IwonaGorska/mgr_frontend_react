@@ -121,7 +121,7 @@ createItems(phrase, amount){
   let t1 = performance.now();
   console.log("Performance create item: ", (t1 - t0)/amount, 'milliseconds');
 
-  this.sendTestResult(1, (t1 - t0)/amount);
+  this.sendTestResult(1, (t1 - t0)/amount, amount);
 }
 
 updateItems(phrase, amount){
@@ -149,7 +149,7 @@ updateItems(phrase, amount){
   let t1 = performance.now();
   console.log("Performance update item: ", (t1 - t0)/amount, 'milliseconds');
 
-  this.sendTestResult(2, (t1 - t0)/amount);
+  this.sendTestResult(2, (t1 - t0)/amount, amount);
 }
   
 // searchForItem(){
@@ -178,7 +178,7 @@ searchForItems(amount){
   let t1 = performance.now();
   console.log("Performance search for item: ", (t1 - t0)/amount, 'milliseconds');
 
-  this.sendTestResult(3, (t1 - t0)/amount);
+  this.sendTestResult(3, (t1 - t0)/amount, amount);
 }
 
 // deleteSingleItem(){
@@ -208,7 +208,7 @@ deleteItems(amount){
   let t1 = performance.now();
   console.log("Performance delete item: ", (t1 - t0)/amount, 'milliseconds');
 
-  this.sendTestResult(4, (t1 - t0)/amount);
+  this.sendTestResult(4, (t1 - t0)/amount, amount);
 }
 
 handleAmountChange = (event) => {
@@ -225,17 +225,18 @@ drawId(){
   var randomNr = Math.floor(Math.random() * max);
   //fetch item_id of this chosen item
   var id = this.props.items[randomNr].item_id;
-  console.log("Draw id = " + id);
+  // console.log("Draw id = " + id);
   return id;
 }
 
-sendTestResult(feature, result){
+sendTestResult(feature, result, avg_of){
   //UWAGA - TA FUNKCJA POWINNA BYC WYSLANA DOPIERO JAK UPLYNIE 
   //TEN CZAS, NIE OD RAZU LINIOWO...
   var tObject = {
     framework: 1,
     feature: feature,
-    score: result
+    score: result,
+    avg_of: avg_of
   }
   // console.log(JSON.stringify(tObject));
   TestsService.create(tObject).then(response=>{
