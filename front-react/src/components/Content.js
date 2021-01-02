@@ -82,6 +82,7 @@ class Content extends React.Component {
 
    beginTest(){
       window.onload = function () {
+         let usedMemory;
          let oper = new Operation();
          console.log('start onload');
          let time = window.performance.timing;
@@ -93,8 +94,9 @@ class Content extends React.Component {
             console.log("performance.memory() is not available.");
             return;
          }
-         console.log('performance.memory.usedJSHeapSize = ', performance.memory.usedJSHeapSize); 
-         oper.sendTestResult(6, performance.memory.usedJSHeapSize, 1);
+         usedMemory = performance.memory.usedJSHeapSize/Math.pow(1000, 2);
+         console.log('performance.memory.usedJSHeapSize = ', usedMemory); 
+         oper.sendTestResult(6, usedMemory, 1);
        }
    }
 
