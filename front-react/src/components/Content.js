@@ -10,6 +10,11 @@ class Content extends React.Component {
    constructor() {
       super();
 
+      this.searchLocalStorage = this.searchLocalStorage.bind(this);
+      this.setLocalStorage = this.setLocalStorage.bind(this);
+      this.pushNotification = this.pushNotification.bind(this);
+      this.getLocation = this.getLocation.bind(this);
+
       this.beginTest = this.beginTest.bind(this);
       this.beginTest();
       this.getAllItems = this.getAllItems.bind(this);
@@ -137,6 +142,67 @@ class Content extends React.Component {
       //    console.log(error);
       // }
    }
+
+   success(position) {
+      console.log(position.coords.latitude);
+      console.log(position.coords.longitude);
+    }
+
+    error() {
+      console.log('error');
+    }
+
+    getLocation(){
+      let t0 = performance.now();
+      if(!navigator.geolocation) {
+        console.log('Geolocation is not supported by your browser');
+      } else {
+        console.log('Locating…');
+        navigator.geolocation.getCurrentPosition(this.success, this.error);
+      }
+      let t1 = performance.now();
+      console.log("Performance location: ", t1 - t0, 'milliseconds');
+    }
+
+    pushNotification(){
+      let t0 = performance.now();
+      // Let's check if the browser supports notifications
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+      }
+
+      // Let's check whether notification permissions have already been granted
+      else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        var notification = new Notification("Hi there!");
+      }
+
+      // Otherwise, we need to ask the user for permission
+      else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(function (permission) {
+          // If the user accepts, let's create a notification
+          if (permission === "granted") {
+            var notification = new Notification("Hi there!");
+          }
+        });
+      }
+      let t1 = performance.now();
+      console.log("Performance notification: ", t1 - t0, 'milliseconds');
+    }
+
+    setLocalStorage(){
+      let t0 = performance.now();
+      localStorage.setItem('test', 'test');
+      let t1 = performance.now();
+      console.log("Performance set storage: ", t1 - t0, 'milliseconds');
+    }
+
+    searchLocalStorage(){
+      let t0 = performance.now();
+      console.log(localStorage.getItem('test'));
+      let t1 = performance.now();
+      console.log("Performance get storage: ", t1 - t0, 'milliseconds');
+    }
   
     render() {
 
@@ -145,6 +211,26 @@ class Content extends React.Component {
             <div id = "contentLeft">
                 {this.state.data.map((operation, i) => <Operation key = {i} number = {i} label = {operation.label} isInput = {operation.isInput} dropdown = {operation.dropdown} dropdownTitle = {operation.dropdownTitle} items = {this.state.items} getAllItems = {this.getAllItems}/>)}
                 {/*<Operation label = "Tworzenie pojedynczego rekordu"/>*/}
+
+
+
+                <div>
+                  <button onClick = {this.getLocation.bind(this)}>
+                  Location
+                  </button>
+                  <button onClick = {this.pushNotification.bind(this)}>
+                  pushNotification
+                  </button>
+                  <button onClick = {this.setLocalStorage.bind(this)}>
+                  setLocalStorage
+                  </button>
+                  <button onClick = {this.searchLocalStorage.bind(this)}>
+                  searchLocalStorage
+                  </button>
+                </div>
+
+
+
             </div>
             <RightContent number = {this.state.items.length}/>
         </div>

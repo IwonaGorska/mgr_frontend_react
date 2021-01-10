@@ -77,7 +77,7 @@ class Chat extends React.Component {
                 </div>
                 <div id="createMsgBlock">
                     <textarea id="txtArea" className="textareaElement" onChange={this.handleMsgChange}></textarea>
-                    <button className="buttonElement" onClick = {this.sendMsg}>Send Message</button>
+                    <button className="buttonElement" onClick = {this.sendMsg}>Wyślij</button>
                 </div>
             </div>
         );
