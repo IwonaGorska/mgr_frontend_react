@@ -14,7 +14,9 @@ constructor(props) {
     amount: 0,
     phrase: "",
     showPopup: false,
-    popupText: "Błędne dane"
+    popupText: "Błędne dane",
+    imgSource: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr-TG2bBh544dNz4bjTR11_4gtX66BHtXKMg&usqp=CAU',
+    isImgLoaded: false
   };
 }
 
@@ -25,28 +27,18 @@ validate() {
       //subscription will wait maybe 1 sec and then things can change, cause error
   var max = this.props.items.length;
   var isCorrect = true;
-  // if([1, 2, 4, 6].includes(this.props.number) && this.state.amount === 0){
-  //   text += "Należy wybrać liczbę z listy. ";
-  //   isCorrect = false;
-  // }
 
-  //or without this first condition
-  if([0, 1, 2, 3].includes(this.props.number) && this.state.amount === 0){ 
+  if(this.state.amount === 0){ 
     text += "Należy wybrać liczbę z listy. ";
     isCorrect = false;
   }
 
-  if([1, 3].includes(this.props.number) && this.state.amount > max){
+  if([1, 2, 3].includes(this.props.number) && this.state.amount > max){
     text += "Wybrana liczba jest większa niż aktualna liczba wszstkich rekordów. ";
     isCorrect = false;
   }
 
-  if([2].includes(this.props.number) && max === 0){
-    text += "Aktualna liczba wszstkich rekordów jest równa 0. ";
-    isCorrect = false;
-  }
-
-  if([0, 1].includes(this.props.number) && !this.state.phrase){
+  if(this.props.isInput && !this.state.phrase){
     text += "Pole tekstowe nie może być puste. ";
     isCorrect = false;
   }
@@ -78,33 +70,19 @@ submit(number, event){
   //console.log("Phrase is " + phrase);
   
   switch(number){
-    // case 0: this.createSingleItem(phrase); break;
     case 0: this.createItems(phrase, amount); break;
     case 1: this.updateItems(phrase, amount); break;
-    // case 3: this.searchForItem(); break;
     case 2: this.searchForItems(amount); break;
-    // case 5: this.deleteSingleItem(); break;
     case 3: this.deleteItems(amount); break;
+
+    case 4: this.getLocation(amount); break;
+    case 5: this.pushNotification(phrase, amount); break;
+    case 6: this.setLocalStorage(phrase, amount); break;
+    case 7: this.searchLocalStorage(phrase, amount); break;
+    case 8: this.addTheImage(amount); break;
     default: console.log("Uncorrect operation number");
   }
 }
-  
-// createSingleItem(phrase){
-//   console.log("Create single item");
-//     var postObject = {
-//         name: phrase
-//     }
-//     ItemsService.create(postObject).then(response=>{
-//       console.log(response)
-//     });
-
-//     // axios.post("http://localhost:8000/items", postObject).then(response=>{
-//     //   console.log(response)
-//     //   this.props.getAllItems();//update the parent component (Content)
-//     //   //it updates items object in Content and also renders once again Operation components 
-//     //   //so everywhere we have access to current state in database
-//     // });
-// }
   
 createItems(phrase, amount){
   console.log("Create items");
@@ -151,19 +129,6 @@ updateItems(phrase, amount){
 
   this.sendTestResult(2, (t1 - t0)/amount, amount);
 }
-  
-// searchForItem(){
-//   //wylosuj id
-//   var id = this.drawId();
-//   //zrob request z tym id
-//   ItemsService.get(id).then((response)=>{
-//     console.log("Found item = " + JSON.stringify(response.data));
-//   });
-//   // axios.get(`http://localhost:8000/items/${id}`).then((response)=>{
-//   //   console.log("Found item = " + JSON.stringify(response.data));
-//   //   this.props.getAllItems();//update the parent component (Content)
-//   // });
-// }
 
 searchForItems(amount){
   console.log("Search for items");
@@ -181,20 +146,6 @@ searchForItems(amount){
   this.sendTestResult(3, (t1 - t0)/amount, amount);
 }
 
-// deleteSingleItem(){
-//   console.log("Delete single item");
-//   //wylosuj id
-//   var id = this.drawId();
-//   //zrob request z tym id
-//   ItemsService.delete(id).then((response)=>{
-//     console.log(response);
-//   });
-//   // axios.delete(`http://localhost:8000/items/${id}`).then((response)=>{
-//   //   console.log(response);
-//   //   this.props.getAllItems();//update the parent component (Content)
-//   // });
-// }
-
 deleteItems(amount){
   console.log("Delete items");
   let t0 = performance.now();
@@ -211,14 +162,6 @@ deleteItems(amount){
   this.sendTestResult(4, (t1 - t0)/amount, amount);
 }
 
-handleAmountChange = (event) => {
-  this.setState({amount: event.value});
-}
-  
-handlePhraseChange = (event) => {
-  this.setState({phrase: event.target.value});
-}
-
 drawId(){
   //choose random index in range of items array size
   var max = this.props.items.length;
@@ -227,6 +170,111 @@ drawId(){
   var id = this.props.items[randomNr].item_id;
   // console.log("Draw id = " + id);
   return id;
+}
+
+success(position) {
+  // console.log(position.coords.latitude);
+  // console.log(position.coords.longitude);
+}
+
+error() {
+  console.log('Error while getting location');
+}
+
+getLocation(amount){
+  if(!navigator.geolocation) {
+    console.log('Geolocation is not supported by your browser');
+  } else {
+    let t0 = performance.now();
+    for(let i = 0; i < amount; i++){
+      navigator.geolocation.getCurrentPosition(this.success, this.error);
+    }
+    // console.log('Locating…');
+    let t1 = performance.now();
+    this.sendTestResult(7, (t1 - t0)/amount, amount);//what if there was an error..
+    console.log("Performance location: ", (t1 - t0)/amount, 'milliseconds');
+  }
+}
+
+pushNotification(phrase, amount){
+  // Let's check if the browser supports notifications
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // Let's check whether notification permissions have already been granted
+  else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    let t0 = performance.now();
+    for(let i = 0; i < amount; i++){
+      new Notification(phrase);
+    }
+    let t1 = performance.now();
+    this.sendTestResult(8, (t1 - t0)/amount, amount);
+    console.log("Performance notification: ", (t1 - t0)/amount, 'milliseconds');
+    // var notification = new Notification(phrase);
+  }
+
+  // Otherwise, we need to ask the user for permission
+  else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        let t0 = performance.now();
+        for(let i = 0; i < amount; i++){
+          new Notification(phrase);
+        }
+        let t1 = performance.now();
+        this.sendTestResult(8, (t1 - t0)/amount, amount);
+        console.log("Performance notification: ", (t1 - t0)/amount, 'milliseconds');
+      }
+    });
+  }
+}
+
+setLocalStorage(phrase, amount){
+  let t0 = performance.now();
+  for(let i = 0; i < amount; i++){
+    localStorage.setItem(phrase, phrase);
+  }
+  let t1 = performance.now();
+  this.sendTestResult(9, (t1 - t0)/amount, amount);
+  console.log("Performance set storage: ", (t1 - t0)/amount, 'milliseconds');
+}
+
+searchLocalStorage(phrase, amount){
+  let t0 = performance.now();
+  // console.log(localStorage.getItem(phrase));
+  for(let i = 0; i < amount; i++){
+    localStorage.getItem(phrase);
+  }
+  let t1 = performance.now();
+  this.sendTestResult(10, (t1 - t0)/amount, amount);
+  console.log("Performance get storage: ", (t1 - t0)/amount, 'milliseconds');
+  console.log(localStorage.getItem(phrase));
+}
+
+addTheImage(amount) { 
+  let t0 = performance.now();
+  for(let i = 0; i < amount; i++){
+    document.getElementById("imageTest").textContent = ''; //removing children from element to not collect many imgs
+    let img = document.createElement('img');
+    img.src = this.state.imgSource;
+    document.getElementById("imageTest").appendChild(img);
+  }
+  let t1 = performance.now();
+  this.sendTestResult(11, (t1 - t0)/amount, amount);
+  console.log("Performance load image: ", (t1 - t0)/amount, 'milliseconds');
+  this.isImgLoaded = true;
+}
+
+
+handleAmountChange = (event) => {
+  this.setState({amount: event.value});
+}
+  
+handlePhraseChange = (event) => {
+  this.setState({phrase: event.target.value});
 }
 
 sendTestResult(feature, result, avg_of){
@@ -248,6 +296,8 @@ sendTestResult(feature, result, avg_of){
 render() {
   var input;
   var dropdown;
+  var picture;
+  var imgSourceP;
   if(this.props.isInput){
     input = <input type = "text" className = "operationElement inputElement" onChange={this.handlePhraseChange} required></input>;
   }
@@ -268,6 +318,13 @@ render() {
     dropdown = <Select options={options} placeholder = {placehold} onChange={this.handleAmountChange} required/>;
   }
 
+  if(this.props.number === 8){
+    if(this.state.isImgLoaded){
+      imgSourceP = <p id='sourceInfo'>Źródło: {this.state.imgSource}</p>;
+    }
+    picture = <div style={{clear: 'both'}}><p id='imageTest'></p>{imgSourceP}</div>;
+  }
+
     return (
       <div id = "operationBlockBig">
         <div className = "operationBlock">
@@ -276,6 +333,7 @@ render() {
             {dropdown}
             {input}
             <button type = "submit" className = "operationElement buttonElement" onClick = {this.submit.bind(this, this.props.number)}>Zatwierdź</button>
+            {picture}
           </form>
           {this.state.showPopup ? 
           <Popup
