@@ -86,34 +86,31 @@ submit(number, event){
   
 createItems(phrase, amount){
   console.log("Create items");
-  var sum = 0;
-  var responsesReceived = 0;
+  let t0 = performance.now();
   for(let i = 0; i < amount; i++){//I tackle amount here not on server side to test the speed on front
     var postObject = {
       name: phrase
     }
-    let t0 = performance.now();
     ItemsService.create(postObject).then(response=>{
       //do sth with response maybe
-      let t1 = performance.now();
-      // console.log("Single response - create: ", t1 - t0, 'milliseconds');
-      sum += t1 - t0;
-      responsesReceived++;
-      // console.log(responsesReceived);
-      if(responsesReceived === amount){//if we have all the responses yet
-        console.log("Performance create item: ", sum/amount, 'milliseconds');
-        this.sendTestResult(1, sum/amount, amount);
-      }
     })
     .catch(error => console.log(error));
   }
+  let t1 = performance.now();
+  console.log("Performance create item: ", (t1 - t0)/amount, 'milliseconds');
+
+  this.sendTestResult(1, (t1 - t0)/amount, amount);
 }
 
 updateItems(phrase, amount){
+  //to obliczenie, że co 10 np. to rób tutaj i stąd uderzaj w endpoint jak na pojedynczy, tylko ze w petli
+  // bo testujesz wydajnosc frontu, a jak zrobisz inaczej, to od serwera bd dokladnie wszystko zalezalo
+  //i tu to amount to bedzie konkretne id do zaktualizowania
+  //wyliczysz sobie, bo liczbe wszystkich rekordow w bazie bd przechowywala tez
+  //z tego zapytania GET tez skorzystaj i bd trzeba je tu trzymac na froncie w arrayu i id z nich pobierac do 
+  //kolejnych requestow uzytku
   console.log("Update items");
-  var sum = 0;
-  var responsesReceived = 0;//I should use this, not simply iterator because
-  //responses gets here in various order and sometimes i=amount-1 is in the middle for example
+  let t0 = performance.now();
   var postObject = {
     name: phrase
   }
@@ -122,66 +119,47 @@ updateItems(phrase, amount){
     // axios.put(`http://localhost:8000/items/${id}`, postObject).then(response=>{
     //   this.props.getAllItems();//update the parent component (Content)
     // });
-    let t0 = performance.now();
     ItemsService.update(id, postObject).then(response=>{
-      let t1 = performance.now();
-      // console.log("Single response - create: ", t1 - t0, 'milliseconds');
-      sum += t1 - t0;
-      responsesReceived++;
-      // console.log(responsesReceived);
-      if(responsesReceived === amount){
-        console.log("Performance update item: ", sum/amount, 'milliseconds');
-        this.sendTestResult(2, sum/amount, amount);
-      }
+      //do sth with response maybe
     })
     .catch(error => console.log(error));
   }
+  let t1 = performance.now();
+  console.log("Performance update item: ", (t1 - t0)/amount, 'milliseconds');
+
+  this.sendTestResult(2, (t1 - t0)/amount, amount);
 }
 
 searchForItems(amount){
   console.log("Search for items");
-  var sum = 0;
-  var responsesReceived = 0;
+  let t0 = performance.now();
   for(let i = 0; i < amount; i++){//I tackle amount here not on server side to test the speed on front
     let id = this.drawId();
-    let t0 = performance.now();
     ItemsService.get(id).then((response)=>{
       // console.log("Found item = " + JSON.stringify(response.data));
-      let t1 = performance.now();
-      // console.log("Single response - search: ", t1 - t0, 'milliseconds');
-      sum += t1 - t0;
-      responsesReceived++;
-      // console.log(responsesReceived);
-      if(responsesReceived === amount){
-        console.log("Performance search item: ", sum/amount, 'milliseconds');
-        this.sendTestResult(3, sum/amount, amount);
-      }
     })
     .catch(error => console.log(error));
   }
+  let t1 = performance.now();
+  console.log("Performance search for item: ", (t1 - t0)/amount, 'milliseconds');
+
+  this.sendTestResult(3, (t1 - t0)/amount, amount);
 }
 
 deleteItems(amount){
   console.log("Delete items");
-  var sum = 0;
-  var responsesReceived = 0;
+  let t0 = performance.now();
   for(let i = 0; i < amount; i++){
     var id = this.props.items[i].item_id;
-    let t0 = performance.now();
     ItemsService.delete(id).then((response)=>{
       //console.log(response);
-      let t1 = performance.now();
-      // console.log("Single response - delete: ", t1 - t0, 'milliseconds');
-      sum += t1 - t0;
-      responsesReceived++;
-      // console.log(responsesReceived);
-      if(responsesReceived === amount){
-        console.log("Performance delete item: ", sum/amount, 'milliseconds');
-        this.sendTestResult(4, sum/amount, amount);
-      }
     })
     .catch(error => console.log(error));
   }
+  let t1 = performance.now();
+  console.log("Performance delete item: ", (t1 - t0)/amount, 'milliseconds');
+
+  this.sendTestResult(4, (t1 - t0)/amount, amount);
 }
 
 drawId(){

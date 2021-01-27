@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import logo from '../logo.svg';
+// import logo from '../logo.svg';
 
 class RightContent extends React.Component {
 
@@ -8,7 +8,7 @@ class RightContent extends React.Component {
     
     return (
       <div id = "contentRight">
-        <img src={logo} className="App-logo" alt="logo" />
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <p id = "description">
         Aplikacja jest częścią pracy magisterskiej na kierunku "Informatyka Stosowana" na temat:<br/>
         "Badanie wydajności aplikacji webowych przy zastosowaniu Angular i React JS".<br/>
